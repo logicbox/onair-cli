@@ -4,7 +4,7 @@ A CLI to access information from [OnAir Company](https://onair.company), because
 
 ## Install
 
-`npm i g onair-cli`
+`npm i -g onair-cli`
 
 Run
 
