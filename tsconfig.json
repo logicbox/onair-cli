@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "ESNext"
+    ],
+    "rootDir": "src",
+    "outDir": "bin",
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "useUnknownInCatchVariables": false,
+    "resolveJsonModule": true,
+  },
+  "include": [
+    "src"
+  ]
+}

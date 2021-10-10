@@ -1,0 +1,100 @@
+import yargs, { BuilderCallback, CommandModule } from 'yargs';
+import chalk from 'chalk';
+import terminalLink from 'terminal-link';
+
+import { cliTable } from '../utils/cli-table';
+import { CommonConfig } from '../types/commonTypes';
+import { getAirport } from './getAirport';
+import { Airport } from '../types/Airport';
+import { Runway } from '../types/Runway';
+import { AirportFrequency } from '../types/AirportFrequency';
+import { AirportLocation } from '../types/AirportLocation';
+
+const log = console.log;
+
+const builder = (yargs: yargs.Argv<CommonConfig>) => {
+  return yargs.positional('ICAO', {
+    desc: 'ICAO airport code',
+    type: 'string',
+    demandOption: true
+  }).option('show-parking-spots', {
+    global: false,
+    describe: 'Show parking spots for airport'
+  });
+}
+
+type AirportCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
+
+export const airportCommand: AirportCommand = {
+  command: 'airport <ICAO>',
+  describe: 'Get information on an aiport',
+  builder,
+  handler: async (argv) => {
+    try {
+      const airport: Airport = await getAirport(argv['ICAO'], argv['apiKey'], argv['world']);
+
+      log(chalk.bold(`${chalk.green('Airport')} ${airport.ICAO}`));
+      log(`${airport.Name}, ${airport.City}, ${airport.State}, ${airport.CountryName}\n`);
+
+      let infoTable = cliTable();
+
+      infoTable.push([chalk.green('Size'), airport.Size,'','']);
+      infoTable.push([chalk.green('UTC Offset'), airport.TimeOffsetInSec / 60 / 60, chalk.green('Closed'), airport.IsClosed ? 'Yes' : 'No']);
+      infoTable.push([chalk.green('Military'), airport.IsMilitary ? 'Yes' : 'No',chalk.green('Lights'), airport.HasLights ? 'Yes' : 'No']);
+      infoTable.push([chalk.green('Elevation'), airport.Elevation + 'ft','','']);
+      infoTable.push([chalk.green('Latitude'), airport.Latitude, chalk.green('Longitude'), airport.Longitude]);
+
+      log(infoTable.toString());
+
+      const link = terminalLink('Open in Bing Maps', `https://www.bing.com/maps?cp=${airport.Latitude}~${airport.Longitude}&lvl=14`);
+      log(link);
+
+      if (airport.Runways.length) {
+        log(chalk.green.bold('\nRunways\n'));
+
+        let runwayTable = cliTable();
+
+        runwayTable.push([chalk.green('Runway'),chalk.green('Magnetic'),chalk.green('Length'),chalk.green('Elevation'),chalk.green('ILS')]);
+
+        airport.Runways.forEach((runway: Runway) => {
+          runwayTable.push([runway.Name, runway.MagneticHeading, runway.Length+'ft', runway.ThresholdElevation+'ft', runway.IlsFrequency || '-']);
+        });
+
+        log(runwayTable.toString());
+      }
+
+      if (airport.AirportFrequencies.length) {
+        log(chalk.green.bold('\nFrequencies\n'));
+
+        let frequencyTable = cliTable();
+
+        frequencyTable.push([chalk.green('Name'),chalk.green('Frequency'),chalk.green('Type')]);
+
+        airport.AirportFrequencies.forEach((freq: AirportFrequency) => {
+          frequencyTable.push([freq.Name, freq.Frequency, freq.FrequencyType]);
+        });
+
+        log(frequencyTable.toString());
+      }
+      
+      if (airport.AirportLocations.length && typeof argv['show-parking-spots'] !== 'undefined') {
+        log(chalk.green.bold('\nParking Spots\n'));
+
+        let parkingTable = cliTable();
+
+        parkingTable.push([chalk.green('Name'),chalk.green('Type'),chalk.green('Latitude'),chalk.green('Longitude'),chalk.green('Heading')]);
+
+        airport.AirportLocations.forEach((parkingSpot: AirportLocation) => {
+          parkingTable.push([parkingSpot.Name, parkingSpot.Type, parkingSpot.Latitude, parkingSpot.Longitude, parkingSpot.MagneticHeading]);
+        });
+
+        log(parkingTable.toString());
+      }
+      
+
+      log(chalk.grey('\nGood Day'));
+    } catch (e) {
+      console.error(chalk.bold.red(e))
+    }
+  }
+}
