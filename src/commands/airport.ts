@@ -90,11 +90,10 @@ export const airportCommand: AirportCommand = {
 
         log(parkingTable.toString());
       }
-      
 
       log(chalk.grey('\nGood Day'));
     } catch (e) {
-      console.error(chalk.bold.red(e))
+      console.error(chalk.bold.red(e.message))
     }
   }
 }

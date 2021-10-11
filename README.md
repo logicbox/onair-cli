@@ -2,6 +2,8 @@
 
 A CLI to access information from [OnAir Company](https://onair.company), because no-one asked for it! Very beta. _Requires an active OnAir Company subscription and API key_.
 
+<img src="./assets/screenshot.png" width="80%">
+
 ## Install
 
 `npm i -g onair-cli`
@@ -25,6 +27,12 @@ Get information about an airport
 `onair-cli --api-key=[API_KEY] --world=[WORLD] airport [ICAO] [options]`
 
 Optionally show airport parking spot information with `--show-parking-spots`
+
+### Company
+
+Get information on your company, your Company ID is also found in the bottom left of the settings page.
+
+`onair-cli --api-key=[API_KEY] --world=[WORLD] company [COMPANY_ID]`
 
 ## Notes
 
