@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link';
 
 import { cliTable } from '../utils/cli-table';
 import { CommonConfig } from '../types/commonTypes';
-import { getAirport } from './getAirport';
+import { getAirport } from '../api/getAirport';
 import { Airport } from '../types/Airport';
 import { Runway } from '../types/Runway';
 import { AirportFrequency } from '../types/AirportFrequency';
@@ -14,7 +14,7 @@ const log = console.log;
 
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
   return yargs.positional('ICAO', {
-    desc: 'ICAO airport code',
+    describe: 'ICAO airport code',
     type: 'string',
     demandOption: true
   }).option('show-parking-spots', {
