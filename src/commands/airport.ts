@@ -39,7 +39,7 @@ export const airportCommand: AirportCommand = {
       log(chalk.bold(`${chalk.green('Airport')} ${airport.ICAO}`));
       log(`${airport.Name}, ${airport.City}, ${airport.State}, ${airport.CountryName}\n`);
 
-      let infoTable = cliTable();
+      const infoTable = cliTable();
 
       infoTable.push([chalk.green('Size'), airport.Size,'','']);
       infoTable.push([chalk.green('UTC Offset'), airport.TimeOffsetInSec / 60 / 60, chalk.green('Closed'), airport.IsClosed ? 'Yes' : 'No']);
@@ -55,7 +55,7 @@ export const airportCommand: AirportCommand = {
       if (airport.Runways.length) {
         log(chalk.green.bold('\nRunways\n'));
 
-        let runwayTable = cliTable();
+        const runwayTable = cliTable();
 
         runwayTable.push([chalk.green('Runway'),chalk.green('Magnetic'),chalk.green('Length'),chalk.green('Elevation'),chalk.green('ILS')]);
 
@@ -69,7 +69,7 @@ export const airportCommand: AirportCommand = {
       if (airport.AirportFrequencies.length) {
         log(chalk.green.bold('\nFrequencies\n'));
 
-        let frequencyTable = cliTable();
+        const frequencyTable = cliTable();
 
         frequencyTable.push([chalk.green('Name'),chalk.green('Frequency'),chalk.green('Type')]);
 
@@ -83,7 +83,7 @@ export const airportCommand: AirportCommand = {
       if (airport.AirportLocations.length && typeof argv['show-parking-spots'] !== 'undefined') {
         log(chalk.green.bold('\nParking Spots\n'));
 
-        let parkingTable = cliTable();
+        const parkingTable = cliTable();
 
         parkingTable.push([chalk.green('Name'),chalk.green('Type'),chalk.green('Latitude'),chalk.green('Longitude'),chalk.green('Heading')]);
 

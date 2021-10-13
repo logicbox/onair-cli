@@ -25,7 +25,7 @@ export const companyCommand: CompanyCommand = {
       const company: Company = await getCompany(argv['companyId'], argv['apiKey'], argv['world']);
       const log = console.log;
 
-      let infoTable = cliTable();
+      const infoTable = cliTable();
       infoTable.push([chalk.green('Company'),company.Name,'','']);
       infoTable.push([
         chalk.green('Code'),

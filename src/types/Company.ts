@@ -1,7 +1,7 @@
 interface CompanySkillPoint {
   Id: string,
   CompanyId: string,
-  Company: {},
+  Company: Record<string, unknown>,
   Amount: number,
   Type: number,
   Tag: string,
