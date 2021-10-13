@@ -17,7 +17,6 @@
     "prebuild": "rimraf bin",
     "build": "tsc",
     "prepublishOnly": "yarn build",
-    "preversion": "npm config set tag-version-prefix \"\"",
     "version": "git add -A",
     "postversion": "git push && git push --tags"
   },
@@ -25,6 +24,7 @@
     "axios": "^0.22.0",
     "chalk": "^4.1.2",
     "cli-table3": "^0.6.0",
+    "find-up": "^5.0.0",
     "terminal-link": "2.1.1",
     "yargs": "^17.2.1"
   },

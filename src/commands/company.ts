@@ -11,17 +11,20 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     describe: 'Company ID',
     type: 'string',
     demandOption: true,
-  }).example('$0 --api-key=<api-key> --world=<world> company <company-id>','Get information for a company');
+  }).example('$0 company','Get information for your company');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
 
 export const companyCommand: CompanyCommand = {
-  command: 'company <company-id> [action]',
+  command: 'company',
   describe: 'Get information on your company',
   builder,
   handler: async (argv) => {
     try {
+      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined' || typeof argv['company'] === 'undefined') {
+        throw new Error('No credentials provided');
+      }
       const company: Company = await getCompany(argv['company-id'], argv['apiKey'], argv['world']);
       const log = console.log;
 

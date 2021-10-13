@@ -10,14 +10,13 @@ import { Runway } from '../types/Runway';
 import { AirportFrequency } from '../types/AirportFrequency';
 import { AirportLocation } from '../types/AirportLocation';
 
-const log = console.log;
-
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
   return yargs.positional('ICAO', {
     describe: 'ICAO airport code',
     type: 'string',
     demandOption: true
   }).option('show-parking-spots', {
+    type: 'string',
     global: false,
     describe: 'Show parking spots for airport'
   });
@@ -31,7 +30,11 @@ export const airportCommand: AirportCommand = {
   builder,
   handler: async (argv) => {
     try {
+      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined') {
+        throw new Error('No credentials provided');
+      }
       const airport: Airport = await getAirport(argv['ICAO'], argv['apiKey'], argv['world']);
+      const log = console.log;
 
       log(chalk.bold(`${chalk.green('Airport')} ${airport.ICAO}`));
       log(`${airport.Name}, ${airport.City}, ${airport.State}, ${airport.CountryName}\n`);
