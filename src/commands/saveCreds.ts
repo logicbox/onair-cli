@@ -18,12 +18,12 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
       required: true,
       describe: 'OnAir world (use "stratus" for Clear Sky)'
     })
-    .option('company', {
+    .option('companyId', {
       type: 'string',
       required: true,
-      describe: 'Your Company API key (not to be confused with main API key)'
+      describe: 'Your Company ID (not to be confused with API key)'
     })
-    .example('$0 save-creds --apiKey=<apiKey> --world=<world> --company=<company>','');
+    .example('$0 save-creds --apiKey=<apiKey> --world=<world> --companyId=<companyId>','');
 }
 
 type SaveCredsCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
@@ -39,7 +39,7 @@ export const saveCredsCommand: SaveCredsCommand = {
       writeFileSync(homedir() + '/' + config.credentialsFilename, JSON.stringify({
         apiKey: argv['apiKey'],
         world: argv['world'],
-        company: argv['company']
+        companyId: argv['companyId']
       }));
 
       log(chalk.greenBright('Credientials saved'));

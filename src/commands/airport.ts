@@ -31,7 +31,7 @@ export const airportCommand: AirportCommand = {
   handler: async (argv) => {
     try {
       if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined') {
-        throw new Error('No credentials provided');
+        throw new Error('Credentials missing or not provided');
       }
       const airport: Airport = await getAirport(argv['ICAO'], argv['apiKey'], argv['world']);
       const log = console.log;

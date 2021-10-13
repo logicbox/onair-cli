@@ -24,9 +24,10 @@ yargs(hideBin(process.argv))
     global: true,
     describe: 'OnAir world (use "stratus" for Clear Sky)'
   })
-  .option('company', {
+  .option('companyId', {
     type: 'string',
-    describe: 'Your Company API key (not to be confused with main API key)'
+    global: true,
+    describe: 'Your Company ID (not to be confused with API key)'
   })
   .middleware(getCreds)
   .command(saveCredsCommand)

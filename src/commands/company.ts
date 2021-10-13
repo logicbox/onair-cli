@@ -7,11 +7,8 @@ import { getCompany } from '../api/getCompany';
 import { Company } from '../types/Company';
 
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
-  return yargs.positional('company-id', {
-    describe: 'Company ID',
-    type: 'string',
-    demandOption: true,
-  }).example('$0 company','Get information for your company');
+  return yargs
+    .example('$0 company','Get information for your company');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
@@ -22,10 +19,10 @@ export const companyCommand: CompanyCommand = {
   builder,
   handler: async (argv) => {
     try {
-      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined' || typeof argv['company'] === 'undefined') {
-        throw new Error('No credentials provided');
+      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined' || typeof argv['companyId'] === 'undefined') {
+        throw new Error('Credentials missing or not provided');
       }
-      const company: Company = await getCompany(argv['company-id'], argv['apiKey'], argv['world']);
+      const company: Company = await getCompany(argv['companyId'], argv['apiKey'], argv['world']);
       const log = console.log;
 
       let infoTable = cliTable();
