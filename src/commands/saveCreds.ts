@@ -28,7 +28,7 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
 
 type SaveCredsCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
 
-export const setCredsCommand: SaveCredsCommand = {
+export const saveCredsCommand: SaveCredsCommand = {
   command: 'save-creds',
   describe: 'Store your OnAir user credentials locally',
   builder,

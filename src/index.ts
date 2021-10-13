@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import yargs, { Argv } from 'yargs';
+import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import chalk from 'chalk';
 
 import { getCreds } from './utils/getCredentials';
-import { setCredsCommand } from './commands/saveCreds';
+import { saveCredsCommand } from './commands/saveCreds';
+import { deleteCredsCommand } from './commands/deleteCreds';
 import { airportCommand } from './commands/airport';
 import { companyCommand } from './commands/company';
 import { config } from './utils/config';
@@ -25,12 +26,13 @@ yargs(hideBin(process.argv))
   })
   .option('company', {
     type: 'string',
-    required: true,
     describe: 'Your Company API key (not to be confused with main API key)'
   })
   .middleware(getCreds)
-  .command(setCredsCommand)
+  .command(saveCredsCommand)
+  .command(deleteCredsCommand)
   .command(airportCommand)
   .command(companyCommand)
+  .demandCommand()
   .wrap(yargs.terminalWidth())
   .parse()
