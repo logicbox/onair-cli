@@ -1,6 +1,24 @@
 import { Airport } from "./Airport";
 import { Company } from "./Company";
 
+export const engineTypes:string[] = [
+  'Piston',
+  'Jet',
+  'Sailplane',
+  'Helo Turbine',
+  'Rocket',
+  'Turboprop'
+];
+
+export const aircraftStatuses:string[] = [
+  'Idle',
+  'Maintenance',
+  'ApronWork',
+  'InFlight',
+  'Warp',
+  'Ferry'
+];
+
 export interface AircraftType {
   Id: string,
   Hash: string,
@@ -56,7 +74,7 @@ export interface Aircraft {
   WorldId: string,
   CurrentAirportId: string,
   CurrentAirport: Airport, //use
-  AircraftStatus: number, //??
+  AircraftStatus: number, //use
   LastStatusChange: number, //date
   CurrentStatusDurationInMinutes: number,
   AllowSell: boolean,

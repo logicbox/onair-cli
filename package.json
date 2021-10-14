@@ -59,5 +59,8 @@
     "onair-company",
     "cli",
     "typescript"
-  ]
+  ],
+  "engines": {
+    "node": ">=12"
+  }
 }

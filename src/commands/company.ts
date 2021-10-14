@@ -1,12 +1,14 @@
-import yargs, { BuilderCallback, CommandModule } from 'yargs';
+import yargs, { BuilderCallback, CommandModule, number } from 'yargs';
 import chalk from 'chalk';
 
 import { cliTable } from '../utils/cli-table';
 import { CommonConfig } from '../types/commonTypes';
 import { getCompany } from '../api/getCompany';
 import { getCompanyFleet } from '../api/getCompanyFleet';
+import { getCompanyFlights } from '../api/getCompanyFlights';
 import { Company } from '../types/Company';
-import { Aircraft } from '../types/Aircraft';
+import { Aircraft, aircraftStatuses } from '../types/Aircraft';
+import { Flight } from '../types/Flight';
 
 const log = console.log;
 
@@ -17,8 +19,14 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
       type: 'string',
       choices: ['fleet', 'flights', 'fbos'],
     })
+    .option('page', {
+      'describe': 'Page number (flights/fbos only)',
+      'type': 'number',
+    })
     .example('$0 company','Get summary information for your company')
-    .example('$0 company fleet','Get information on your aircraft');
+    .example('$0 company fleet','List your aircraft')
+    .example('$0 company flights','List your flights')
+    .example('$0 company flights -p=2','List your flights, showing page 2');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
@@ -41,12 +49,27 @@ export const companyCommand: CompanyCommand = {
           case 'fleet':
             const companyFleet: Aircraft[] = await getCompanyFleet(argv['companyId'], argv['apiKey'], argv['world']);
             if (companyFleet.length) {
+              log(chalk.greenBright.bold('Your fleet of aircraft\n'));
               renderCompanyFleet(companyFleet);
-              log('\nSuggested command: onair-cli aircraft <id>');
+              log(`\nSuggested command: ${argv['$0']} aircraft <id>`);
             } else {
               log('Dude, where\'s your aircraft?! ' + chalk.magentaBright('✈'));
             }
-            
+            break;
+          case 'flights': {
+            const page = typeof argv['page'] === 'undefined' || argv['page'] < 1 ? 1 : argv['page'];
+            const limit = 20;
+            const companyFlights: Flight[] = await getCompanyFlights(argv['companyId'], argv['apiKey'], argv['world'], page, limit);
+            if (companyFlights.length) {
+              log(chalk.greenBright.bold(`Your flights (Page ${page}, ${limit} per page)\n`));
+              renderCompanyFlights(companyFlights);
+              log(`\nSuggested command: ${argv['$0']} company ${argv['action']} --page=${page+1}`);
+              log(`Suggested command: ${argv['$0']} flight <id>`);
+            } else {
+              log('I feel the need... the need for speed! ' + chalk.magentaBright('✈'));
+            }
+            break;
+          }
         }
       }
 
@@ -90,8 +113,8 @@ const renderCompanyFleet = (companyFleet: Aircraft[]): void => {
   aircraftTable.push([
     chalk.green('Name'),
     chalk.green('Ident'),
-    chalk.green('Engine'),
     chalk.green('Airport'),
+    chalk.green('Status'),
     chalk.green('ID')
   ]);
 
@@ -99,11 +122,47 @@ const renderCompanyFleet = (companyFleet: Aircraft[]): void => {
     aircraftTable.push([
       chalk.whiteBright(Aircraft.AircraftType.DisplayName),
       Aircraft.Identifier,
-      Aircraft.AircraftType.engineType,
-      Aircraft.CurrentAirport.ICAO,
+      Aircraft.CurrentAirport?.ICAO || '-',
+      aircraftStatuses[Aircraft.AircraftStatus],
       Aircraft.Id
     ])
   });
 
   log(aircraftTable.toString());
+}
+
+const renderCompanyFlights = (companyFlights: Flight[]): void => {
+  const flightTable = cliTable();
+
+  flightTable.push([
+    chalk.green('Ident'),
+    chalk.green('Airborne'),
+    chalk.green('=>'),
+    chalk.green('Landed'),
+    chalk.green('>='),
+    chalk.green('ID'),
+    chalk.green(''),
+  ]);
+
+  companyFlights.forEach((Flight) => {
+    const airborneTime = typeof Flight.AirborneTime !== 'undefined' ? 
+      new Date(Date.parse(Flight.AirborneTime)).toLocaleString('en-GB').substring(0,17) :
+      '-';
+
+    const landedTime = typeof Flight.LandedTime !== 'undefined' ? 
+      new Date(Date.parse(Flight.LandedTime)).toLocaleString('en-GB').substring(0,17) :
+      '-';
+
+    flightTable.push([
+      Flight.Aircraft.Identifier,
+      airborneTime,
+      Flight.DepartureAirport?.ICAO,
+      landedTime,
+      Flight.ArrivalActualAirport?.ICAO || '-',
+      Flight.Id,
+      Flight.RegisterState === 9 ? '✅' : '❌',
+    ])
+  });
+
+  log(flightTable.toString());
 }
