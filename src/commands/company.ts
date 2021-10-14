@@ -68,6 +68,7 @@ export const companyCommand: CompanyCommand = {
               log(chalk.greenBright.bold(`Your flights (Page ${page}, ${limit} per page)\n`));
               renderCompanyFlights(companyFlights);
               log(`\nSuggested command: ${argv['$0']} company ${argv['action']} --page=${page+1}`);
+              log(`Suggested command: ${argv['$0']} airport <ICAO>`); 
               //log(`Suggested command: ${argv['$0']} flight <id>`); 
             } else {
               log('I feel the need... the need for speed! ' + chalk.magentaBright('✈'));

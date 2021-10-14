@@ -10,6 +10,7 @@ import { deleteCredsCommand } from './commands/deleteCreds';
 import { airportCommand } from './commands/airport';
 import { companyCommand } from './commands/company';
 import { config } from './utils/config';
+import { aircraftCommand } from './commands/aircraft';
 
 console.log(chalk.bgWhite.blackBright.bold(`\n CLI for OnAir Company v${config.packageJson.version} \n`));
 
@@ -34,6 +35,7 @@ yargs(hideBin(process.argv))
   .command(deleteCredsCommand)
   .command(airportCommand)
   .command(companyCommand)
+  .command(aircraftCommand)
   .demandCommand()
   .wrap(yargs.terminalWidth())
   .parse()

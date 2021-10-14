@@ -15,7 +15,7 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     describe: 'ICAO airport code',
     type: 'string',
     demandOption: true
-  }).option('show-parking-spots', {
+  }).option('parking-spots', {
     type: 'string',
     global: false,
     describe: 'Show parking spots for airport'
@@ -49,7 +49,7 @@ export const airportCommand: AirportCommand = {
 
       log(infoTable.toString());
 
-      const link = terminalLink('Open in Bing Maps', `https://www.bing.com/maps?cp=${airport.Latitude}~${airport.Longitude}&lvl=14`);
+      const link = terminalLink('Open in Bing Maps', `https://www.bing.com/maps?cp=${airport.Latitude}~${airport.Longitude}&lvl=13`);
       log(link);
 
       if (airport.Runways.length) {
@@ -80,7 +80,7 @@ export const airportCommand: AirportCommand = {
         log(frequencyTable.toString());
       }
       
-      if (airport.AirportLocations.length && typeof argv['show-parking-spots'] !== 'undefined') {
+      if (airport.AirportLocations.length && typeof argv['parking-spots'] !== 'undefined') {
         log(chalk.green.bold('\nParking Spots\n'));
 
         const parkingTable = cliTable();
@@ -92,6 +92,8 @@ export const airportCommand: AirportCommand = {
         });
 
         log(parkingTable.toString());
+      } else {
+        log(`\nSuggested command: ${argv['$0']} airport ${argv['ICAO']} --parking-spots`);
       }
 
       log(chalk.grey('\nGood Day'));
