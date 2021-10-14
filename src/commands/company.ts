@@ -1,4 +1,4 @@
-import yargs, { BuilderCallback, CommandModule, number } from 'yargs';
+import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
 
 import { cliTable } from '../utils/cli-table';
@@ -6,9 +6,11 @@ import { CommonConfig } from '../types/commonTypes';
 import { getCompany } from '../api/getCompany';
 import { getCompanyFleet } from '../api/getCompanyFleet';
 import { getCompanyFlights } from '../api/getCompanyFlights';
+import { getCompanyFbos } from '../api/getCompanyFbos';
 import { Company } from '../types/Company';
 import { Aircraft, aircraftStatuses } from '../types/Aircraft';
 import { Flight } from '../types/Flight';
+import { Fbo } from '../types/Fbo';
 
 const log = console.log;
 
@@ -26,7 +28,8 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     .example('$0 company','Get summary information for your company')
     .example('$0 company fleet','List your aircraft')
     .example('$0 company flights','List your flights')
-    .example('$0 company flights -p=2','List your flights, showing page 2');
+    .example('$0 company flights --page=2','List your flights, showing page 2')
+    .example('$0 company fbos', 'List your FBOs');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
@@ -46,7 +49,7 @@ export const companyCommand: CompanyCommand = {
         renderCompany(company);
       } else {
         switch (argv['action']) {
-          case 'fleet':
+          case 'fleet': {
             const companyFleet: Aircraft[] = await getCompanyFleet(argv['companyId'], argv['apiKey'], argv['world']);
             if (companyFleet.length) {
               log(chalk.greenBright.bold('Your fleet of aircraft\n'));
@@ -56,6 +59,7 @@ export const companyCommand: CompanyCommand = {
               log('Dude, where\'s your aircraft?! ' + chalk.magentaBright('✈'));
             }
             break;
+          } 
           case 'flights': {
             const page = typeof argv['page'] === 'undefined' || argv['page'] < 1 ? 1 : argv['page'];
             const limit = 20;
@@ -64,11 +68,20 @@ export const companyCommand: CompanyCommand = {
               log(chalk.greenBright.bold(`Your flights (Page ${page}, ${limit} per page)\n`));
               renderCompanyFlights(companyFlights);
               log(`\nSuggested command: ${argv['$0']} company ${argv['action']} --page=${page+1}`);
-              log(`Suggested command: ${argv['$0']} flight <id>`);
+              //log(`Suggested command: ${argv['$0']} flight <id>`); 
             } else {
               log('I feel the need... the need for speed! ' + chalk.magentaBright('✈'));
             }
             break;
+          }
+          case 'fbos': {
+            const companyFbos: Fbo[] = await getCompanyFbos(argv['companyId'], argv['apiKey'], argv['world']);
+            if (companyFbos.length) {
+              log(chalk.greenBright.bold('Your FBOs\n'));
+              renderCompanyFbos(companyFbos);
+            } else {
+              log('No FBO... no 100LL! ' + chalk.magentaBright('✈'))
+            }
           }
         }
       }
@@ -165,4 +178,50 @@ const renderCompanyFlights = (companyFlights: Flight[]): void => {
   });
 
   log(flightTable.toString());
+}
+
+const renderCompanyFbos = (companyFbos: Fbo[]): void => {
+  const fboTable = cliTable();
+
+  fboTable.push([
+    chalk.green('Airport'),
+    chalk.green('Name'),
+    chalk.green('100LL'),
+    chalk.green('Sell'),
+    chalk.green('Jet'),
+    chalk.green('Sell'),
+    chalk.green('C'),
+    chalk.green('S'),
+    chalk.green('T'),
+    chalk.green('H')
+  ]);
+
+  companyFbos.forEach((Fbo) => {
+    fboTable.push([
+      Fbo.Airport.ICAO,
+      Fbo.Name,
+      Fbo.Fuel100LLQuantity + '/' + Fbo.Fuel100LLCapacity,
+      Fbo.AllowFuel100LLSelling ? `✅ ${Fbo.Fuel100LLSellPrice}` : '❌',
+      Fbo.FuelJetQuantity + '/' + Fbo.FuelJetCapacity,
+      Fbo.AllowFuelJetSelling ? `✅ ${Fbo.FuelJetSellPrice}` : '❌',
+      Fbo.CargoWeightCapacity,
+      Fbo.SleepingCapacity,
+      Fbo.AircraftTieDownCapacity,
+      Fbo.AircraftHangarCapacity
+    ])
+  });
+  
+  log(fboTable.toString());
+
+  log(
+    chalk.whiteBright.bold('\nKey ') + 
+    chalk.green('C') + 
+    ' Cargo capacity  ' + 
+    chalk.green('S') + 
+    ' Sleeping  ' + 
+    chalk.green('T') + 
+    ' Tiedowns  ' + 
+    chalk.green('H') + 
+    ' Hanger'
+  );
 }
