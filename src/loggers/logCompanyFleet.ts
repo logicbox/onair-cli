@@ -10,7 +10,7 @@ export const logCompanyFleet = (companyFleet: Aircraft[]) => {
     chalk.green('Ident'),
     chalk.green('Airport'),
     chalk.green('Status'),
-    chalk.green('ID')
+    chalk.green('Aircraft ID')
   ]);
 
   companyFleet.forEach((Aircraft) => {

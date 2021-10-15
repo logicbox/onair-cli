@@ -11,6 +11,7 @@ import { airportCommand } from './commands/airport';
 import { companyCommand } from './commands/company';
 import { config } from './utils/config';
 import { aircraftCommand } from './commands/aircraft';
+import { flightsCommand } from './commands/flights';
 
 console.log(chalk.bgWhite.blackBright.bold(`\n CLI for OnAir Company v${config.packageJson.version} \n`));
 
@@ -36,6 +37,7 @@ yargs(hideBin(process.argv))
   .command(airportCommand)
   .command(companyCommand)
   .command(aircraftCommand)
+  .command(flightsCommand)
   .demandCommand()
   .wrap(yargs.terminalWidth())
   .parse()

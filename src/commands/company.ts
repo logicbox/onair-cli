@@ -58,7 +58,8 @@ export const companyCommand: CompanyCommand = {
             if (companyFleet.length) {
               log(chalk.greenBright.bold('Your fleet of aircraft\n'));
               logCompanyFleet(companyFleet);
-              log(`\nSuggested command: ${argv['$0']} aircraft <id>`);
+              log(`\nSuggested command: ${argv['$0']} aircraft <aircraftId>`);
+              log(`\nSuggested command: ${argv['$0']} flights <aircraftId>`);
             } else {
               log('Dude, where\'s your aircraft?! ' + chalk.magentaBright('✈'));
             }
