@@ -6,6 +6,9 @@ import { config } from '../utils/config';
 const endPoint = 'aircraft/';
 
 export const getAircraft = async (aircraftId: string, apiKey: string, world: string) => {
+  if (aircraftId.length!==36) {
+    throw new Error('Aircraft ID looks incorrect! It should be a 32 character UUID')
+  }
   return await axios.get(`https://${world}${config.apiUrl}${endPoint}${aircraftId}`, {
     headers: {
       'oa-apikey': apiKey,
