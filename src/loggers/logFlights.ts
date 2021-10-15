@@ -19,7 +19,7 @@ export const logFlights = (flights: Flight[], showIdent: boolean=true, showCompa
     chalk.green('=>'),
     chalk.green('Landed'),
     chalk.green('>='),
-    chalk.green('ID'),
+    chalk.green('Flight ID'),
     chalk.green(''),
   ]);
 
