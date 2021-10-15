@@ -17,20 +17,31 @@
     "prebuild": "rimraf bin",
     "build": "tsc",
     "prepublishOnly": "yarn build",
-    "preversion": "npm config set tag-version-prefix \"\"",
     "version": "git add -A",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "lint": "eslint src --ext .ts",
+    "prettier": "prettier --check 'src/**/*.ts'",
+    "prettier:fix": "prettier --write 'src/**/*.ts'"
   },
   "dependencies": {
     "axios": "^0.22.0",
     "chalk": "^4.1.2",
     "cli-table3": "^0.6.0",
+    "find-up": "^5.0.0",
     "terminal-link": "2.1.1",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
     "@types/node": "^16.10.2",
     "@types/yargs": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-unused-imports": "^1.1.5",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.3"
   },
@@ -48,5 +59,8 @@
     "onair-company",
     "cli",
     "typescript"
-  ]
+  ],
+  "engines": {
+    "node": ">=12"
+  }
 }

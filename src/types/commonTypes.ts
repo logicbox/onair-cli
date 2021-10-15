@@ -1,5 +1,6 @@
 /** Options common to all commands. */
 export interface CommonConfig {
-  apiKey: string; 
-  world: string;
+  apiKey: string | undefined; 
+  world: string | undefined;
+  companyId: string | undefined;
 }

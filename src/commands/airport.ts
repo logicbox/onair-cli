@@ -10,14 +10,13 @@ import { Runway } from '../types/Runway';
 import { AirportFrequency } from '../types/AirportFrequency';
 import { AirportLocation } from '../types/AirportLocation';
 
-const log = console.log;
-
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
   return yargs.positional('ICAO', {
     describe: 'ICAO airport code',
     type: 'string',
     demandOption: true
-  }).option('show-parking-spots', {
+  }).option('parking-spots', {
+    type: 'string',
     global: false,
     describe: 'Show parking spots for airport'
   });
@@ -31,12 +30,16 @@ export const airportCommand: AirportCommand = {
   builder,
   handler: async (argv) => {
     try {
+      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined') {
+        throw new Error('Credentials missing or not provided');
+      }
       const airport: Airport = await getAirport(argv['ICAO'], argv['apiKey'], argv['world']);
+      const log = console.log;
 
       log(chalk.bold(`${chalk.green('Airport')} ${airport.ICAO}`));
       log(`${airport.Name}, ${airport.City}, ${airport.State}, ${airport.CountryName}\n`);
 
-      let infoTable = cliTable();
+      const infoTable = cliTable();
 
       infoTable.push([chalk.green('Size'), airport.Size,'','']);
       infoTable.push([chalk.green('UTC Offset'), airport.TimeOffsetInSec / 60 / 60, chalk.green('Closed'), airport.IsClosed ? 'Yes' : 'No']);
@@ -46,13 +49,13 @@ export const airportCommand: AirportCommand = {
 
       log(infoTable.toString());
 
-      const link = terminalLink('Open in Bing Maps', `https://www.bing.com/maps?cp=${airport.Latitude}~${airport.Longitude}&lvl=14`);
+      const link = terminalLink('Open in Bing Maps', `https://www.bing.com/maps?cp=${airport.Latitude}~${airport.Longitude}&lvl=13`);
       log(link);
 
       if (airport.Runways.length) {
         log(chalk.green.bold('\nRunways\n'));
 
-        let runwayTable = cliTable();
+        const runwayTable = cliTable();
 
         runwayTable.push([chalk.green('Runway'),chalk.green('Magnetic'),chalk.green('Length'),chalk.green('Elevation'),chalk.green('ILS')]);
 
@@ -66,7 +69,7 @@ export const airportCommand: AirportCommand = {
       if (airport.AirportFrequencies.length) {
         log(chalk.green.bold('\nFrequencies\n'));
 
-        let frequencyTable = cliTable();
+        const frequencyTable = cliTable();
 
         frequencyTable.push([chalk.green('Name'),chalk.green('Frequency'),chalk.green('Type')]);
 
@@ -77,10 +80,10 @@ export const airportCommand: AirportCommand = {
         log(frequencyTable.toString());
       }
       
-      if (airport.AirportLocations.length && typeof argv['show-parking-spots'] !== 'undefined') {
+      if (airport.AirportLocations.length && typeof argv['parking-spots'] !== 'undefined') {
         log(chalk.green.bold('\nParking Spots\n'));
 
-        let parkingTable = cliTable();
+        const parkingTable = cliTable();
 
         parkingTable.push([chalk.green('Name'),chalk.green('Type'),chalk.green('Latitude'),chalk.green('Longitude'),chalk.green('Heading')]);
 
@@ -89,6 +92,8 @@ export const airportCommand: AirportCommand = {
         });
 
         log(parkingTable.toString());
+      } else {
+        log(`\nSuggested command: ${argv['$0']} airport ${argv['ICAO']} --parking-spots`);
       }
 
       log(chalk.grey('\nGood Day'));
