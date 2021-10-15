@@ -8,6 +8,8 @@ _Requires an active OnAir Company subscription and API key_.
 
 ## Install
 
+Requires NodeJS, installs via NPM.
+
 `npm i -g onair-cli`
 
 Run
@@ -22,7 +24,7 @@ or run without an install via npx
 
 For ease of use it is recommend to save your OnAir credentials
 
-`onair save-creds --api-key=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID]`
+`onair-cli save-creds --api-key=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID]`
 
 Your OnAir API key and Company ID are found in the bottom left of the settings page in the OnAir client. The world name is 'cumulus', 'stratus', or 'thunder'. Use 'stratus' for Clear Sky server.
 
@@ -84,7 +86,7 @@ Show flights for an aircraft, this supports pagination.
 
 ### Save Credentials
 
-`onair set-creds --apiKey=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID]`
+`onair-cli set-creds --apiKey=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID]`
 
 Your OnAir API key and Company ID are found in the bottom left of the settings page in the OnAir client. The world name is 'cumulus', 'stratus', or 'thunder'.
 
