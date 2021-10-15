@@ -19,7 +19,7 @@ export const getAircraft = async (aircraftId: string, apiKey: string, world: str
     if (typeof response.data.Content !== 'undefined') {
       return response.data.Content as Aircraft;
     } else {
-      throw new Error(response.data.Error ? response.data.Error : `Aircraft ID code ${aircraftId.toUpperCase()} not found`);
+      throw new Error(response.data.Error ? response.data.Error : `Aircraft ID code ${aircraftId} not found`);
     };
   }).catch((e) => {
     throw new Error(e.message);

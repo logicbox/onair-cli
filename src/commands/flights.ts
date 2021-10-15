@@ -40,10 +40,11 @@ export const flightsCommand: FlightsCommand = {
       const limit = 20;
       const flights: Flight[] = await getAircraftFlights(argv['aircraftId'], argv['apiKey'], argv['world'], page, limit);
 
-      if (flights.length) {
-        console.log(chalk.greenBright(`\nLatest flights\n`));
-        logFlights(flights, false, true);
+      if (!flights.length) {
+        throw new Error('No flights found! Is Aircraft ID Correct?')
       }
+      console.log(chalk.greenBright(`\nLatest flights\n`));
+      logFlights(flights, false, true);
 
       console.log(`\nSuggested command: ${argv['$0']} aircraft ${argv['aircraftId']}`);
 
