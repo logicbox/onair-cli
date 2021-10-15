@@ -14,10 +14,6 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     describe: 'Aircraft ID',
     type: 'string',
     demandOption: true
-  }).option('flights', {
-    type: 'string',
-    global: false,
-    describe: 'Shows 10 latest flights for aircraft'
   });
 }
 
@@ -35,19 +31,15 @@ export const aircraftCommand: AircraftCommand = {
       const aircraft: Aircraft = await getAircraft(argv['aircraftId'], argv['apiKey'], argv['world']);
       logAircraft(aircraft);
 
-      if (typeof argv['flights'] !== 'undefined') {
-        const flights: Flight[] = await getAircraftFlights(aircraft.Id, argv['apiKey'], argv['world'], 1, 10);
+      const flights: Flight[] = await getAircraftFlights(aircraft.Id, argv['apiKey'], argv['world'], 1, 10);
 
-        if (flights.length) {
-          console.log(chalk.greenBright(`\nLatest flights\n`));
-          logFlights(flights, false, true);
-          //log(`Suggested command: ${argv['$0']} flight <id>`); 
-        } else {
-          console.log('I feel the need... the need for speed! ' + chalk.magentaBright('✈'));
-        }
-      } else {
-        console.log(`\nSuggested command: ${argv['$0']} aircraft ${argv['aircraftId']} --flights`);
+      if (flights.length) {
+        console.log(chalk.greenBright(`\nLatest flights\n`));
+        logFlights(flights, false, true);
       }
+
+      console.log(`\nSuggested command: ${argv['$0']} flights ${argv['aircraftId']}`);
+
       console.log(chalk.grey('\nGood Day'));
     } catch (e) {
       console.error(chalk.bold.red(e.message))
