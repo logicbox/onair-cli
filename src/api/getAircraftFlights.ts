@@ -1,32 +1,34 @@
 import axios from 'axios';
 
+import onAirRequest, { FlightsResponse } from '../utils/onAirRequest';
 import { Flight } from '../types/Flight';
 import { config } from '../utils/config';
+import { uuid4 } from '../utils/utils';
 
 const endPoint = 'aircraft/';
 
-export const getAircraftFlights = async (aircraftId: string, apiKey: string, world: string, page: number = 1, limit: number = 10) => {
-  if (aircraftId.length !== 36) {
-    throw new Error('Aircraft ID looks incorrect! It should be a 32 character UUID')
+export const getAircraftFlights = async (aircraftId: string, apiKey: string, world: string, page: number = 1, limit: number = 10): Promise<Flight[]> => {
+  if (!aircraftId.match(uuid4)) {
+    throw new Error('Aircraft ID is incorrect! It should be a 36 character UUID')
   }
+  
   const startIndex = page > 1 ? limit * page : 0;
-  return await axios.get(`https://${world}${config.apiUrl}${endPoint}${aircraftId}/flights`, {
-    params: {
-      startIndex: startIndex,
-      limit: limit
-    },
-    headers: {
-      'oa-apikey': apiKey,
-      'Accept': 'application/json',
-      'User-Agent': `CLI for OnAir Company v${config.packageJson.version}`
-    },
-  }).then((response: any) => {
+
+  try {
+    const response = await onAirRequest<FlightsResponse>(
+      `https://${world}${config.apiUrl}${endPoint}${aircraftId}/flights`,
+      apiKey, {
+        startIndex: startIndex,
+        limit: limit
+      }
+    );
+
     if (typeof response.data.Content !== 'undefined') {
       return response.data.Content as Flight[];
     } else {
       throw new Error(response.data.Error ? response.data.Error : `Aircraft ID code ${aircraftId.toUpperCase()} not found`);
     };
-  }).catch((e) => {
+  } catch (e) {
     throw new Error(e.message);
-  });
+  }
 }
