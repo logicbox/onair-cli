@@ -1,4 +1,4 @@
-import onAirRequest, { AircraftResponse } from '../utils/onAirRequest';
+import onAirRequest, { AircraftResponse } from './onAirRequest';
 import { Aircraft } from '../types/Aircraft';
 import { config } from '../utils/config';
 import { uuid4 } from '../utils/utils';

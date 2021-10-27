@@ -1,6 +1,6 @@
 import { Company } from '../types/Company';
 import { config } from '../utils/config';
-import onAirRequest, { CompanyResponse } from '../utils/onAirRequest';
+import onAirRequest, { CompanyResponse } from './onAirRequest';
 
 const endPoint = 'company/';
 

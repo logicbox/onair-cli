@@ -42,7 +42,7 @@ export interface FboResponse extends OnAirResponse {
  * @returns Promise<AxiosResponse<T>>
  */
 export default async <T>(url: string, apiKey: string, requestData?: Record<string, unknown> | undefined): Promise<AxiosResponse<T>> => {
-  let axiosConfig: AxiosRequestConfig = {
+  const axiosConfig: AxiosRequestConfig = {
     headers: {
       'oa-apikey': apiKey,
       'Accept': 'application/json',

@@ -1,6 +1,6 @@
 import { Airport } from '../types/Airport';
 import { config } from '../utils/config';
-import onAirRequest, { AirportResponse } from '../utils/onAirRequest';
+import onAirRequest, { AirportResponse } from './onAirRequest';
 
 const endPoint = 'airports/';
 

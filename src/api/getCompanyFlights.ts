@@ -1,6 +1,6 @@
 import { Flight } from '../types/Flight';
 import { config } from '../utils/config';
-import onAirRequest, { FlightsResponse } from '../utils/onAirRequest';
+import onAirRequest, { FlightsResponse } from './onAirRequest';
 
 const endPoint = 'company/';
 

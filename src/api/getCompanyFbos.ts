@@ -1,6 +1,6 @@
 import { Fbo } from '../types/Fbo';
 import { config } from '../utils/config';
-import onAirRequest, { FboResponse } from '../utils/onAirRequest';
+import onAirRequest, { FboResponse } from './onAirRequest';
 
 const endPoint = 'company/';
 

@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-import onAirRequest, { FlightsResponse } from '../utils/onAirRequest';
+import onAirRequest, { FlightsResponse } from './onAirRequest';
 import { Flight } from '../types/Flight';
 import { config } from '../utils/config';
 import { uuid4 } from '../utils/utils';

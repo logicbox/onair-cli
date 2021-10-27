@@ -1,8 +1,6 @@
-import axios from 'axios';
-
 import { Aircraft } from '../types/Aircraft';
 import { config } from '../utils/config';
-import onAirRequest, { AircraftResponse } from '../utils/onAirRequest';
+import onAirRequest, { AircraftResponse } from './onAirRequest';
 
 const endPoint = 'company/';
 
