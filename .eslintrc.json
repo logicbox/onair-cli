@@ -11,8 +11,7 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "import",
-    "unused-imports"
+    "import"
   ],
   "extends": [
     "eslint:recommended",
