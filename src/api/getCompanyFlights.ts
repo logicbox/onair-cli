@@ -1,6 +1,6 @@
 import { Flight } from '../types/Flight';
 import { config } from '../utils/config';
-import onAirRequest, { FlightsResponse } from './onAirRequest';
+import onAirRequest, { FlightResponse } from './onAirRequest';
 
 const endPoint = 'company/';
 
@@ -8,7 +8,7 @@ export const getCompanyFlights = async (companyId: string, apiKey: string, world
   const startIndex = page > 1 ? limit * page : 0;
   
   try {
-    const response = await onAirRequest<FlightsResponse>(
+    const response = await onAirRequest<FlightResponse>(
       `https://${world}${config.apiUrl}${endPoint}${companyId}/flights`,
       apiKey, {
         startIndex: startIndex,

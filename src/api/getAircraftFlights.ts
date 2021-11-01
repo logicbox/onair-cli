@@ -1,4 +1,4 @@
-import onAirRequest, { FlightsResponse } from './onAirRequest';
+import onAirRequest, { FlightResponse } from './onAirRequest';
 import { Flight } from '../types/Flight';
 import { config } from '../utils/config';
 import { uuid4 } from '../utils/utils';
@@ -13,7 +13,7 @@ export const getAircraftFlights = async (aircraftId: string, apiKey: string, wor
   const startIndex = page > 1 ? limit * page : 0;
 
   try {
-    const response = await onAirRequest<FlightsResponse>(
+    const response = await onAirRequest<FlightResponse>(
       `https://${world}${config.apiUrl}${endPoint}${aircraftId}/flights`,
       apiKey, {
         startIndex: startIndex,

@@ -17,8 +17,8 @@ export interface AircraftResponse extends OnAirResponse {
   Content: Aircraft | Aircraft[];
 }
 
-export interface FlightsResponse extends OnAirResponse {
-  Content: Flight[];
+export interface FlightResponse extends OnAirResponse {
+  Content: Flight | Flight[];
 }
 
 export interface AirportResponse extends OnAirResponse {

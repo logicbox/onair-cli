@@ -2,9 +2,6 @@ import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
 
 import { CommonConfig } from '../types/commonTypes';
-import { getAircraft } from '../api/getAircraft';
-import { Aircraft } from '../types/Aircraft';
-import { logAircraft } from '../loggers/logAircraft';
 import { Flight } from '../types/Flight';
 import { getAircraftFlights } from '../api/getAircraftFlights';
 import { logFlights } from '../loggers/logFlights';

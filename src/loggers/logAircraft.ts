@@ -9,7 +9,7 @@ export const logAircraft = (aircraft: Aircraft): void => {
 
   log(chalk.bold(`${chalk.greenBright.bold('Aircraft')} ${aircraft.AircraftType.DisplayName} (${aircraft.Identifier})`));
 
-  log(chalk.greenBright('\nLocation\n'))
+  log(chalk.greenBright('\nCurrent location\n'))
   const locationTable = cliTable();
 
   locationTable.push([
