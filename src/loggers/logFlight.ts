@@ -60,10 +60,16 @@ export const logFlight = (flight: Flight, cols: number=80): void => {
     Math.round(flight.ActualCruiseAltitude / 1000) * 10
   ])
   table.push([
+    chalk.green('Passengers'),
+    flight.PAXCount,
+    chalk.green('Cargo'),
+    flight.CargosTotalWeight + ' lbs'
+  ])
+  table.push([
+    chalk.green('Time offset'),
+    flight.TimeOffset,
     chalk.green('Flight XP'),
     flight.XPFlight,
-    '',
-    ''
   ])
 
   log('\n' + table.toString());

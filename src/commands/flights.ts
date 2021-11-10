@@ -49,6 +49,7 @@ export const flightsCommand: FlightsCommand = {
         console.log(`Suggested command: ${argv['$0']} flights ${argv['aircraftId']} -p=${page + 1}`);
       }
       console.log(`Suggested command: ${argv['$0']} aircraft ${argv['aircraftId']}`);
+      console.log(`Suggested command: ${argv['$0']} flight <flightId> (Completed only)`);
 
       console.log(chalk.grey('\nGood Day'));
     } catch (e) {

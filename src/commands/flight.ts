@@ -39,7 +39,7 @@ export const flightCommand: FlightCommand = {
       }
 
       if (flight.RegisterState === 0) {
-        throw new Error('Aborted flight not supported');
+        throw new Error('Only successfully completed flights supported');
       }
     
       logFlight(flight);

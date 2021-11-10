@@ -81,7 +81,7 @@ export const companyCommand: CompanyCommand = {
                 log(`Suggested command: ${argv['$0']} company ${argv['action']} -p=${page+1}`);
               }
               log(`Suggested command: ${argv['$0']} airport <ICAO>`); 
-              //log(`Suggested command: ${argv['$0']} flight <id>`); 
+              log(`Suggested command: ${argv['$0']} flight <flightId> (Completed only)`);
             } else {
               log('I feel the need... the need for speed! ' + chalk.magentaBright('✈'));
             }
