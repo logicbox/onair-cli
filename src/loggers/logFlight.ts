@@ -23,7 +23,7 @@ export const logFlight = (flight: Flight, cols: number=80): void => {
   log(chalk.cyanBright(flight.DepartureAirport.DisplayName) + ' '.repeat(spaceCharCount) + chalk.cyanBright(flight.ArrivalActualAirport.DisplayName));
 
   let leftRepeatCount = Math.floor(cols / 2) - chars.left.length;
-  let rightRepeatCount = cols - Math.floor(cols / 2) - chars.right.length - 1;
+  const rightRepeatCount = cols - Math.floor(cols / 2) - chars.right.length - 1;
   log(chars.left + chars.mid.repeat(leftRepeatCount) + chars.centre + chars.mid.repeat(rightRepeatCount) + chars.right);
 
   const flightTimeInMinutes = dayjs(flight.LandedTime).diff(flight.AirborneTime, 'minutes');
