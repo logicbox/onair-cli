@@ -6,6 +6,7 @@ import { Flight } from '../types/Flight';
 import { getFlight } from '../api/getFlight';
 import { logFlight } from '../loggers/logFlight';
 import { logAircraft } from '../loggers/logAircraft';
+import { logAirport } from '../loggers/logAirport';
 
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
   return yargs
@@ -16,7 +17,7 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     })
     .option('show-aircraft', {
       type: 'string',
-      describe: 'Show aircraft information'
+      describe: 'Aircraft information'
     });
 }
 
@@ -43,6 +44,11 @@ export const flightCommand: FlightCommand = {
       }
     
       logFlight(flight);
+
+      console.log();
+      logAirport(flight.DepartureAirport, 'Departure airport');
+      console.log();
+      logAirport(flight.ArrivalActualAirport, 'Arrival airport');
 
       if (typeof argv['show-aircraft'] !== 'undefined') {
         console.log();
