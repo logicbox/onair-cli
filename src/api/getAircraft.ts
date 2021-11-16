@@ -1,27 +1,28 @@
-import axios from 'axios';
-
+import onAirRequest, { AircraftResponse } from './onAirRequest';
 import { Aircraft } from '../types/Aircraft';
 import { config } from '../utils/config';
+import { uuid4 } from '../utils/utils';
 
 const endPoint = 'aircraft/';
 
-export const getAircraft = async (aircraftId: string, apiKey: string, world: string) => {
-  if (aircraftId.length!==36) {
-    throw new Error('Aircraft ID looks incorrect! It should be a 32 character UUID')
+export const getAircraft = async (aircraftId: string, apiKey: string, world: string): Promise<Aircraft> => {
+  if (!aircraftId.match(uuid4) ) {
+    throw new Error('Aircraft ID is incorrect! It should be a 36 character UUID')
   }
-  return await axios.get(`https://${world}${config.apiUrl}${endPoint}${aircraftId}`, {
-    headers: {
-      'oa-apikey': apiKey,
-      'Accept': 'application/json',
-      'User-Agent': `CLI for OnAir Company v${config.packageJson.version}`
-    },
-  }).then((response: any) => {
+
+  try {
+    const response = await onAirRequest<AircraftResponse>(
+      `https://${world}${config.apiUrl}${endPoint}${aircraftId}`, 
+      apiKey
+      );
+
     if (typeof response.data.Content !== 'undefined') {
       return response.data.Content as Aircraft;
     } else {
       throw new Error(response.data.Error ? response.data.Error : `Aircraft ID code ${aircraftId} not found`);
     };
-  }).catch((e) => {
+  } catch (e) {
     throw new Error(e.message);
-  });
+  }
 }
+

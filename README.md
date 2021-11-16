@@ -22,7 +22,7 @@ or run without an install via npx
 
 ## Setup
 
-For ease of use it is recommend to save your OnAir credentials
+For ease of use I recommend to save your OnAir credentials:
 
 `onair-cli save-creds --api-key=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID]`
 
@@ -73,6 +73,16 @@ List your company's aircraft flights, this supports pagination.
 List your company FBOs, including fuel, fuel selling status and tied down/hanger space.
 
 `onair-cli company fbos`
+
+### Flight
+
+Display flight data and airport info for a completed flight. In-progress or aborted flights not supported.
+
+`onair-cli flight <flightID>`
+
+'flightID' is a 32 character UUID that is displayed on the completed flights screen of the OnAir Company client.
+
+Optionally show aircraft information too with `--show-aircraft`
 
 ### Flights
 

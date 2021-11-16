@@ -2,9 +2,6 @@ import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
 
 import { CommonConfig } from '../types/commonTypes';
-import { getAircraft } from '../api/getAircraft';
-import { Aircraft } from '../types/Aircraft';
-import { logAircraft } from '../loggers/logAircraft';
 import { Flight } from '../types/Flight';
 import { getAircraftFlights } from '../api/getAircraftFlights';
 import { logFlights } from '../loggers/logFlights';
@@ -43,10 +40,16 @@ export const flightsCommand: FlightsCommand = {
       if (!flights.length) {
         throw new Error('No flights found! Is Aircraft ID Correct?')
       }
-      console.log(chalk.greenBright(`\nLatest flights\n`));
+      console.log(chalk.greenBright.bold(`\nAircraft flights (Page ${page}, ${limit} per page)\n`));
+    
       logFlights(flights, false, true);
-
-      console.log(`\nSuggested command: ${argv['$0']} aircraft ${argv['aircraftId']}`);
+      
+      console.log('');
+      if (flights.length === limit) {
+        console.log(`Suggested command: ${argv['$0']} flights ${argv['aircraftId']} -p=${page + 1}`);
+      }
+      console.log(`Suggested command: ${argv['$0']} aircraft ${argv['aircraftId']}`);
+      console.log(`Suggested command: ${argv['$0']} flight <flightId> (Completed only)`);
 
       console.log(chalk.grey('\nGood Day'));
     } catch (e) {

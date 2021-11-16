@@ -57,9 +57,11 @@ export const companyCommand: CompanyCommand = {
             const companyFleet: Aircraft[] = await getCompanyFleet(argv['companyId'], argv['apiKey'], argv['world']);
             if (companyFleet.length) {
               log(chalk.greenBright.bold('Your fleet of aircraft\n'));
+              
               logCompanyFleet(companyFleet);
+              
               log(`\nSuggested command: ${argv['$0']} aircraft <aircraftId>`);
-              log(`\nSuggested command: ${argv['$0']} flights <aircraftId>`);
+              log(`Suggested command: ${argv['$0']} flights <aircraftId>`);
             } else {
               log('Dude, where\'s your aircraft?! ' + chalk.magentaBright('✈'));
             }
@@ -71,10 +73,15 @@ export const companyCommand: CompanyCommand = {
             const companyFlights: Flight[] = await getCompanyFlights(argv['companyId'], argv['apiKey'], argv['world'], page, limit);
             if (companyFlights.length) {
               log(chalk.greenBright.bold(`Your flights (Page ${page}, ${limit} per page)\n`));
+              
               logFlights(companyFlights);
-              log(`\nSuggested command: ${argv['$0']} company ${argv['action']} -p=${page+1}`);
+              
+              console.log('');
+              if (companyFlights.length === limit) {
+                log(`Suggested command: ${argv['$0']} company ${argv['action']} -p=${page+1}`);
+              }
               log(`Suggested command: ${argv['$0']} airport <ICAO>`); 
-              //log(`Suggested command: ${argv['$0']} flight <id>`); 
+              log(`Suggested command: ${argv['$0']} flight <flightId> (Completed only)`);
             } else {
               log('I feel the need... the need for speed! ' + chalk.magentaBright('✈'));
             }
@@ -82,6 +89,7 @@ export const companyCommand: CompanyCommand = {
           }
           case 'fbos': {
             const companyFbos: Fbo[] = await getCompanyFbos(argv['companyId'], argv['apiKey'], argv['world']);
+            
             if (companyFbos.length) {
               log(chalk.greenBright.bold('Your FBOs\n'));
               logCompanyFbos(companyFbos);
