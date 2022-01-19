@@ -25,7 +25,7 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
     const diffMs = (dueDate - today); // milliseconds between now & dueDate
     const diffInMinutes = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
     
-    if (diffInMinutes < 0) {
+    if (diffInMinutes <= 0) {
       output = chalk.red(`${diffInMinutes} mins`)
     } else if (diffInMinutes <= 240) {
       output = chalk.yellow(`${diffInMinutes} mins`)
