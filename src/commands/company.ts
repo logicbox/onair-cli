@@ -14,6 +14,9 @@ import { logFlights } from '../loggers/logFlights';
 import { logCompany } from '../loggers/logCompany';
 import { logCompanyFleet } from '../loggers/logCompanyFleet';
 import { logCompanyFbos } from '../loggers/logCompanyFbos';
+import { logCompanyJobs } from '../loggers/logCompanyJobs';
+import { getCompanyJobs } from '../api/getCompanyJobs';
+import { Job } from '../types/Job';
 
 const log = console.log;
 
@@ -22,7 +25,7 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     .positional('action', {
       describe: 'Optional info to lookup from your company',
       type: 'string',
-      choices: ['fleet', 'flights', 'fbos'],
+      choices: ['fleet', 'flights', 'fbos', 'jobs'],
     })
     .option('page', {
       'describe': 'Page number (flights only)',
@@ -33,7 +36,8 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     .example('$0 company fleet','List your aircraft')
     .example('$0 company flights','List your flights')
     .example('$0 company flights -p=2','List your flights, showing page 2')
-    .example('$0 company fbos', 'List your FBOs');
+    .example('$0 company fbos', 'List your FBOs')
+    .example('$0 company jobs', 'List your pending jobs');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
@@ -87,6 +91,7 @@ export const companyCommand: CompanyCommand = {
             }
             break;
           }
+
           case 'fbos': {
             const companyFbos: Fbo[] = await getCompanyFbos(argv['companyId'], argv['apiKey'], argv['world']);
             
@@ -96,6 +101,19 @@ export const companyCommand: CompanyCommand = {
             } else {
               log('No FBO... no 100LL! ' + chalk.magentaBright('✈'))
             }
+            break;  
+          }
+
+          case 'jobs': {
+            const companyJobs: Job[] = await getCompanyJobs(argv['companyId'], argv['apiKey'], argv['world']);
+
+            if (companyJobs.length) {
+              log(chalk.greenBright.bold('Your Pending Jobs\n'));
+              logCompanyJobs(companyJobs);
+            } else {
+              log('No pending jobs! ' + chalk.magentaBright('✈'))
+            }
+            break;
           }
         }
       }
