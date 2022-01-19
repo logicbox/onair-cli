@@ -74,6 +74,12 @@ List your company FBOs, including fuel, fuel selling status and tied down/hanger
 
 `onair-cli company fbos`
 
+### Company Jobs
+
+List your companie's pending jobs
+
+`onair-cli company jobs`
+
 ### Flight
 
 Display flight data and airport info for a completed flight. In-progress or aborted flights not supported.
