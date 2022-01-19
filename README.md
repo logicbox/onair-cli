@@ -76,7 +76,7 @@ List your company FBOs, including fuel, fuel selling status and tied down/hanger
 
 ### Company Jobs
 
-List your companie's pending jobs
+List your company's pending jobs
 
 `onair-cli company jobs`
 
