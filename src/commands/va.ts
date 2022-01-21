@@ -27,8 +27,10 @@ export const vaCommand: VACommand = {
   builder,
   handler: async (argv) => {
     try {
-      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined' || typeof argv['vaId'] === 'undefined') {
-        throw new Error('Credentials missing or not provided');
+      if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined') {
+        throw new Error('Credentials missing or not provided.');
+      } else if (typeof argv['vaId'] === 'undefined') {
+        throw new Error('vaID not set, run save-creds and specify a vaId, first.');
       }
 
       if (typeof argv['action'] === 'undefined') {

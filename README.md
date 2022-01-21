@@ -100,11 +100,18 @@ Show flights for an aircraft, this supports pagination.
 
 'aircraftId' is a 32 character UUID available from the aircraft details page in the OnAir client.
 
+
+### (VA) Virtual Airline
+Get summary information for a given virtual airline
+**Note:** You must specify a vaId prior to being able to run this command
+
+`onair-cli va`
+
 ### Save Credentials
 
-`onair-cli set-creds --apiKey=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID]`
+`onair-cli set-creds --apiKey=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID] --vaId=[VIRTUAL_AIRLINE_ID]`
 
-Your OnAir API key and Company ID are found in the bottom left of the settings page in the OnAir client. The world name is 'cumulus', 'stratus', or 'thunder'.
+Your OnAir API key and Company ID are found in the bottom left of the settings page in the OnAir client. The world name is 'cumulus', 'stratus', or 'thunder'. Your OnAir Virtual Airline ID can be found in the Manage VA options screen.
 
 ### Delete Credentials
 
