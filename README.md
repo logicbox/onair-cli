@@ -107,6 +107,13 @@ Get summary information for a given virtual airline
 
 `onair-cli va`
 
+
+### (VA) Virtual Airline Members
+Shows the members of a given VA and their associated details. The role name and color will match with whatever OnAir reports.
+**Note:** You must specify a vaId prior to being able to run this command
+
+`onair-cli va members`
+
 ### Save Credentials
 
 `onair-cli set-creds --apiKey=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID] --vaId=[VIRTUAL_AIRLINE_ID]`

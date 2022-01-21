@@ -6,7 +6,7 @@ import { Company } from "../types/Company";
 import { Fbo } from "../types/Fbo";
 import { Flight } from "../types/Flight";
 import { Job } from "../types/Job";
-import { VirtualAirline } from "../types/VirtualAirline";
+import { Member, VirtualAirline } from "../types/VirtualAirline";
 import { config } from '../utils/config';
 
 
@@ -40,6 +40,9 @@ export interface JobResponse extends OnAirResponse {
 
 export interface VirtualAirlineResponse extends OnAirResponse {
   Content: VirtualAirline;
+}
+export interface VirtualAirlineMemberResponse extends OnAirResponse {
+  Content: Member | Member[];
 }
 
 /**
