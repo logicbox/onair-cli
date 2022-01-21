@@ -9,9 +9,12 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
   jobTable.push([
     chalk.green('Job Type'),
     chalk.green('Description'),
-    chalk.green('Base Airport'),
     chalk.green('Num Legs'),
+    chalk.green('Base Airport'),
+    chalk.green('Cur Airport'),
+    chalk.green('Dest Airport'),
     chalk.green('Total Distance'),
+    chalk.green('Human Req.'),
     chalk.green('Expires In'),
     chalk.green('Pay'),
     chalk.green('XP')
@@ -40,7 +43,7 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
     // determine BaseAirport by matching BaseAirportId up within cargo or charter arrays
     let baseAirport: any = undefined;
 
-    if (baseAirport !== undefined && job.Cargos.length > 0) {
+    if (job.Cargos.length > 0) {
       // iterate over Cargos array and find baseAirport
       job.Cargos.find((e) => {
           if (e.DepartureAirport.Id === job.BaseAirportId) {
@@ -53,7 +56,7 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
       })
     }
 
-    if (baseAirport !== undefined && job.Charters.length > 0) {
+    if (job.Charters.length > 0) {
         job.Charters.find((e) => {
           if (e.DepartureAirport.Id === job.BaseAirportId) {
             baseAirport = e.DepartureAirport
@@ -65,17 +68,69 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
       })
     }
 
+    // build Job row
+    // Description
+    // Base Airport
+    // Cur Airport
+    // Dest Airport
+    // Num Legs
+    // Total Distance
+    // Human Req
+    
+    // Expires In
+    // Pay
+    // XP
     jobTable.push([
-      job.MissionType.ShortName,
-      job.MissionType.Description,
-      baseAirport.ICAO,
-      `${job.Cargos.length + job.Charters.length} legs`,
-      `${job.TotalDistance} mi`,
-      determineExpiresIn(job.ExpirationDate),
-      `${job.Pay}.00`,
-      `+${job.XP}`,
+      job.MissionType.ShortName, // Job Type
+      null, // Leg Description
+      `${job.Cargos.length + job.Charters.length} legs`, // Num Legs
+      (baseAirport) ? baseAirport.ICAO : null, // Base Airport
+      null, // Cur Airport
+      null, // Dest Airport
+      `${job.TotalDistance} mi`, // Total Distance,
+      null, // Human Req
+      determineExpiresIn(job.ExpirationDate), // Expires In
+      `${job.Pay}.00`, // Pay
+      `+${job.XP}`, // XP
     ])
 
+    if (job.Cargos.length > 0) {
+      job.Cargos.forEach((cargo) => {
+        jobTable.push([
+          null, // Job Type
+          cargo.Description, // Leg Description
+          null, // Num Legs
+          null, // Base Airport
+          (cargo.CurrentAirport) ? cargo.CurrentAirport.ICAO : null, // Cur Airport
+          (cargo.DestinationAirport) ? cargo.DestinationAirport.ICAO : null, // Dest Airport
+          `${cargo.Distance} mi`, // Total Distance
+          (cargo.HumanOnly) ? 'Yes' : 'No', // Human Req
+          null, // Expires In
+          null, // Pay,
+          null, // XP
+
+        ])
+      })
+    }
+
+    if (job.Charters.length > 0) {
+      job.Charters.forEach((charter) => {
+        jobTable.push([
+          null, // Job Type
+          charter.Description, // Leg Description
+          null, // Num Legs
+          null, // Base Airport
+          (charter.CurrentAirport) ? charter.CurrentAirport.ICAO : null, // Cur Airport
+          (charter.DestinationAirport) ? charter.DestinationAirport.ICAO : null, // Dest Airport
+          `${charter.Distance} mi`, // Total Distance
+          (charter.HumanOnly) ? 'Yes' : 'No', // Human Req
+          null, // Expires In
+          null, // Pay,
+          null, // XP
+
+        ])
+      })
+    }
   });
 
   console.log(jobTable.toString());
