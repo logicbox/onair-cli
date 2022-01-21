@@ -6,6 +6,7 @@ import { Company } from "../types/Company";
 import { Fbo } from "../types/Fbo";
 import { Flight } from "../types/Flight";
 import { Job } from "../types/Job";
+import { VirtualAirline } from "../types/VirtualAirline";
 import { config } from '../utils/config';
 
 
@@ -36,6 +37,11 @@ export interface FboResponse extends OnAirResponse {
 export interface JobResponse extends OnAirResponse {
   Content: Job[];
 }
+
+export interface VirtualAirlineResponse extends OnAirResponse {
+  Content: VirtualAirline;
+}
+
 /**
  * Generic Get request to OnAir
  * 
