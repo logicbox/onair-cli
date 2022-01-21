@@ -17,8 +17,8 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
       type: 'string',
       choices: ['members'],
     })
-    .example('$0 va','Get summary information for your virtual airline');
-    // .example('$0 va members','List the members of your virtual airline');
+    .example('$0 va','Get summary information for your virtual airline')
+    .example('$0 va members','List the members of your virtual airline');
 }
 
 type VACommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
