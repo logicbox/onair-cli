@@ -13,7 +13,7 @@ import { config } from './utils/config';
 import { aircraftCommand } from './commands/aircraft';
 import { flightsCommand } from './commands/flights';
 import { flightCommand } from './commands/flight';
-import { vaCommand } from './commands/va';
+import { vaCommand } from './commands/virtualAirline';
 
 console.log(chalk.bgWhite.blackBright.bold(`\n CLI for OnAir Company v${config.packageJson.version} \n`));
 
