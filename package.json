@@ -7,6 +7,12 @@
     "name": "Will Kelly",
     "email": "will@logicbox.net"
   },
+  "contributors": [
+    {
+      "name": "Mike DeVita",
+      "email": "mike@devita.co"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/logicbox/onair-cli"
@@ -54,6 +60,7 @@
   },
   "homepage": "https://github.com/logicbox/onair-cli#readme",
   "keywords": [
+    "onair",
     "onair-company",
     "cli",
     "typescript"
