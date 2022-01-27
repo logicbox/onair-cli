@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { Company } from "../types/Company";
+import { Company } from "onair-api";
+
 import { cliTable } from "../utils/cli-table";
 
 export const logCompany = (company: Company): void => {

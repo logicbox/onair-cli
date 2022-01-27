@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { Aircraft, aircraftStatuses } from "../types/Aircraft";
+import { Aircraft } from "onair-api";
+
 import { cliTable } from "../utils/cli-table";
 
 export const logCompanyFleet = (companyFleet: Aircraft[]) => {
@@ -18,7 +19,7 @@ export const logCompanyFleet = (companyFleet: Aircraft[]) => {
       chalk.whiteBright(Aircraft.AircraftType.DisplayName),
       Aircraft.Identifier,
       Aircraft.CurrentAirport?.ICAO || '-',
-      aircraftStatuses[Aircraft.AircraftStatus],
+      Aircraft.AircraftStatusName,
       Aircraft.Id
     ])
   });

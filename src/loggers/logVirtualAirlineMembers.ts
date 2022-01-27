@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { Member, } from "../types/VirtualAirline";
+import { Member } from "onair-api";
+
 import { cliTable } from "../utils/cli-table";
 
 export const logVirtualAirlineMembers = (vaMembers: Member[]): void => {

@@ -1,9 +1,8 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
+import OnAirApi, { OnAirApiConfig, Flight } from 'onair-api';
 
-import { CommonConfig } from '../types/commonTypes';
-import { Flight } from '../types/Flight';
-import { getFlight } from '../api/getFlight';
+import { CommonConfig } from '../utils/commonTypes';
 import { logFlight } from '../loggers/logFlight';
 import { logAircraft } from '../loggers/logAircraft';
 import { logAirport } from '../loggers/logAirport';
@@ -33,7 +32,9 @@ export const flightCommand: FlightCommand = {
         throw new Error('Credentials missing or not provided');
       }
       
-      const flight: Flight = await getFlight(argv['flightId'], argv['apiKey'], argv['world']);
+      const config: OnAirApiConfig = { apiKey: argv['apiKey'], world: argv['world'] }
+      const api = new OnAirApi(config);
+      const flight: Flight = await api.getFlight(argv['flightId']);
 
       if (!flight) {
         throw new Error('No flight found! Is Flight ID Correct?')

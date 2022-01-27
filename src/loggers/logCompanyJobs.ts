@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { Airport } from "../types/Airport";
-import { Job } from "../types/Job";
+import { Airport, Job } from "onair-api";
+
 import { cliTable } from "../utils/cli-table";
 
 export const logCompanyJobs = (companyJobs: Job[]): void => {
@@ -41,7 +41,7 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
 
   companyJobs.forEach((job) => {
     // determine BaseAirport by matching BaseAirportId up within cargo or charter arrays
-    let baseAirport: any = undefined;
+    let baseAirport: Airport | undefined;
 
     if (job.Cargos.length > 0) {
       // iterate over Cargos array and find baseAirport

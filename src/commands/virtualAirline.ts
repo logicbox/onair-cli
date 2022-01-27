@@ -1,11 +1,9 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
+import OnAirApi, { OnAirApiConfig, Member, VirtualAirline } from 'onair-api';
 
-import { CommonConfig } from '../types/commonTypes';
-import { Member, VirtualAirline } from '../types/VirtualAirline';
+import { CommonConfig } from '../utils/commonTypes';;
 import { logVirtualAirline } from '../loggers/logVirtualAirline';
-import { getVirtualAirline } from '../api/getVirtualAirline';
-import { getVirtualAirlineMembers } from '../api/getVirtualAirlineMembers';
 import { logVirtualAirlineMembers } from '../loggers/logVirtualAirlineMembers';
 
 const log = console.log;
@@ -35,14 +33,17 @@ export const vaCommand: VACommand = {
         throw new Error('vaID not set, run save-creds and specify a vaId, first.');
       }
 
+      const config: OnAirApiConfig = { apiKey: argv['apiKey'], world: argv['world'], vaId: argv['vaId'] };
+      const api = new OnAirApi(config);
+
       if (typeof argv['action'] === 'undefined') {
-        const va: VirtualAirline = await getVirtualAirline(argv['vaId'], argv['apiKey'], argv['world']);
+        const va: VirtualAirline = await api.getVirtualAirline();
         logVirtualAirline(va);
       } else {
         switch (argv['action']) {
           case 'members': {
-            const va: VirtualAirline = await getVirtualAirline(argv['vaId'], argv['apiKey'], argv['world']);
-            const vaMembers: Member[] = await getVirtualAirlineMembers(argv['vaId'], argv['apiKey'], argv['world']);
+            const va: VirtualAirline = await api.getVirtualAirline();
+            const vaMembers: Member[] = await api.getVirtualAirlineMembers();
             if (vaMembers.length) {
               log(chalk.greenBright.bold(`(${va.AirlineCode}) ${va.Name} Members\n`));
               

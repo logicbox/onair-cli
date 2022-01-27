@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import dayjs from 'dayjs';
-import { Flight } from "../types/Flight";
+import { Flight } from "onair-api";
+
 import { cliTable } from "../utils/cli-table";
 
 const formatDate = (date: string): string => {

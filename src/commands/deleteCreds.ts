@@ -4,7 +4,7 @@ import findUp from 'find-up';
 import { unlinkSync } from 'fs';
 import { homedir } from 'os';
 
-import { CommonConfig } from '../types/commonTypes';
+import { CommonConfig } from '../utils/commonTypes';
 import { config } from '../utils/config';
 
 const builder = (yargs: yargs.Argv<CommonConfig>) => {

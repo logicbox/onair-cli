@@ -1,8 +1,7 @@
 import chalk from 'chalk';
 import terminalLink from 'terminal-link';
+import { Airport, Runway } from 'onair-api';
 
-import { Airport } from '../types/Airport';
-import { Runway } from '../types/Runway';
 import { cliTable } from '../utils/cli-table';
 
 export const logAirport = (airport: Airport, label: string='Airport'): void => {

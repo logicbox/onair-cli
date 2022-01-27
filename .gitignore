@@ -3,3 +3,5 @@ node_modules/
 /bin
 yarn-debug.log*
 yarn-error.log*
+yalc.lock
+.yalc

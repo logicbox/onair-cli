@@ -1,13 +1,9 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
-import terminalLink from 'terminal-link';
+import OnAirApi, { OnAirApiConfig, Airport, AirportFrequency, AirportLocation } from 'onair-api';
 
 import { cliTable } from '../utils/cli-table';
-import { CommonConfig } from '../types/commonTypes';
-import { getAirport } from '../api/getAirport';
-import { Airport } from '../types/Airport';
-import { AirportFrequency } from '../types/AirportFrequency';
-import { AirportLocation } from '../types/AirportLocation';
+import { CommonConfig } from '../utils/commonTypes';
 import { logAirport } from '../loggers/logAirport';
 
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
@@ -33,7 +29,10 @@ export const airportCommand: AirportCommand = {
       if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined') {
         throw new Error('Credentials missing or not provided');
       }
-      const airport: Airport = await getAirport(argv['ICAO'], argv['apiKey'], argv['world']);
+
+      const config: OnAirApiConfig = { apiKey: argv['apiKey'], world: argv['world'] }
+      const api = new OnAirApi(config);
+      const airport: Airport = await api.getAirport(argv['ICAO']);
       const log = console.log;
 
       logAirport(airport);
