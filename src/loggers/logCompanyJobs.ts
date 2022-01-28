@@ -9,13 +9,13 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
   jobTable.push([
     chalk.green('Job Type'),
     chalk.green('Description'),
-    chalk.green('Num Legs'),
-    chalk.green('Base Airport'),
-    chalk.green('Cur Airport'),
-    chalk.green('Dest Airport'),
-    chalk.green('Total Distance'),
+    chalk.green('Legs'),
+    chalk.green('Base Arpt.'),
+    chalk.green('Current'),
+    chalk.green('Dest'),
+    chalk.green('Distance'),
     chalk.green('Human Req.'),
-    chalk.green('Expires In'),
+    chalk.green('Expires'),
     chalk.green('Pay'),
     chalk.green('XP')
   ]);
@@ -87,10 +87,10 @@ export const logCompanyJobs = (companyJobs: Job[]): void => {
       (baseAirport) ? baseAirport.ICAO : null, // Base Airport
       null, // Cur Airport
       null, // Dest Airport
-      `${job.TotalDistance} mi`, // Total Distance,
+      `${Math.round(job.TotalDistance)} mi`, // Total Distance,
       null, // Human Req
       determineExpiresIn(job.ExpirationDate), // Expires In
-      `${job.Pay}.00`, // Pay
+      `${job.Pay}`, // Pay
       `+${job.XP}`, // XP
     ])
 
