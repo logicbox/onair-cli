@@ -1,12 +1,9 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
+import OnAirApi, { OnAirApiConfig, Aircraft, Flight } from 'onair-api';
 
-import { CommonConfig } from '../types/commonTypes';
-import { getAircraft } from '../api/getAircraft';
-import { Aircraft } from '../types/Aircraft';
+import { CommonConfig } from '../utils/commonTypes';
 import { logAircraft } from '../loggers/logAircraft';
-import { Flight } from '../types/Flight';
-import { getAircraftFlights } from '../api/getAircraftFlights';
 import { logFlights } from '../loggers/logFlights';
 
 const builder = (yargs: yargs.Argv<CommonConfig>) => {
@@ -28,10 +25,13 @@ export const aircraftCommand: AircraftCommand = {
       if (typeof argv['apiKey'] === 'undefined' || typeof argv['world'] === 'undefined') {
         throw new Error('Credentials missing or not provided');
       }
-      const aircraft: Aircraft = await getAircraft(argv['aircraftId'], argv['apiKey'], argv['world']);
+      
+      const config: OnAirApiConfig = { apiKey: argv['apiKey'], world: argv['world'] };
+      const api = new OnAirApi(config);
+      const aircraft: Aircraft = await api.getAircraft(argv['aircraftId']);
       logAircraft(aircraft);
 
-      const flights: Flight[] = await getAircraftFlights(aircraft.Id, argv['apiKey'], argv['world'], 1, 10);
+      const flights: Flight[] = await api.getAircraftFlights(aircraft.Id, 1, 10);
 
       if (flights.length) {
         console.log(chalk.greenBright(`\nLatest flights\n`));

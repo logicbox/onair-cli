@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import terminalLink from 'terminal-link';
 
-import { Aircraft, aircraftStatuses, engineTypes } from '../types/Aircraft';
+import { Aircraft } from 'onair-api';
 import { cliTable } from '../utils/cli-table';
 
 export const logAircraft = (aircraft: Aircraft): void => {
@@ -14,7 +14,7 @@ export const logAircraft = (aircraft: Aircraft): void => {
 
   locationTable.push([
     chalk.green('Status'),
-    aircraftStatuses[aircraft.AircraftStatus],
+    aircraft.AircraftStatusName,
     '',
     ''
   ])
@@ -40,7 +40,7 @@ export const logAircraft = (aircraft: Aircraft): void => {
   const infoTable = cliTable();
   infoTable.push([
     chalk.green('Engine Type'),
-    engineTypes[aircraft.AircraftType.engineType],
+    aircraft.AircraftType.EngineTypeName,
     chalk.green('Speed'),
     aircraft.AircraftType.designSpeedVC + 'Kts',
   ]);

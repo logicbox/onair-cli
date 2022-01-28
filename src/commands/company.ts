@@ -1,19 +1,13 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
+import OnAirApi, { OnAirApiConfig, Company, Aircraft, Flight, Fbo, Job } from 'onair-api';
 
-import { CommonConfig } from '../types/commonTypes';
-import { getCompany } from '../api/getCompany';
-import { getCompanyFleet } from '../api/getCompanyFleet';
-import { getCompanyFlights } from '../api/getCompanyFlights';
-import { getCompanyFbos } from '../api/getCompanyFbos';
-import { Company } from '../types/Company';
-import { Aircraft } from '../types/Aircraft';
-import { Flight } from '../types/Flight';
-import { Fbo } from '../types/Fbo';
+import { CommonConfig } from '../utils/commonTypes';
 import { logFlights } from '../loggers/logFlights';
 import { logCompany } from '../loggers/logCompany';
 import { logCompanyFleet } from '../loggers/logCompanyFleet';
 import { logCompanyFbos } from '../loggers/logCompanyFbos';
+import { logCompanyJobs } from '../loggers/logCompanyJobs';
 
 const log = console.log;
 
@@ -22,7 +16,7 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     .positional('action', {
       describe: 'Optional info to lookup from your company',
       type: 'string',
-      choices: ['fleet', 'flights', 'fbos'],
+      choices: ['fleet', 'flights', 'fbos', 'jobs'],
     })
     .option('page', {
       'describe': 'Page number (flights only)',
@@ -33,7 +27,8 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     .example('$0 company fleet','List your aircraft')
     .example('$0 company flights','List your flights')
     .example('$0 company flights -p=2','List your flights, showing page 2')
-    .example('$0 company fbos', 'List your FBOs');
+    .example('$0 company fbos', 'List your FBOs')
+    .example('$0 company jobs', 'List your pending jobs');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
@@ -48,13 +43,16 @@ export const companyCommand: CompanyCommand = {
         throw new Error('Credentials missing or not provided');
       }
 
+      const config: OnAirApiConfig = { apiKey: argv['apiKey'], world: argv['world'], companyId: argv['companyId'] };
+      const api = new OnAirApi(config);
+
       if (typeof argv['action'] === 'undefined') {
-        const company: Company = await getCompany(argv['companyId'], argv['apiKey'], argv['world']);
+        const company: Company = await api.getCompany();
         logCompany(company);
       } else {
         switch (argv['action']) {
           case 'fleet': {
-            const companyFleet: Aircraft[] = await getCompanyFleet(argv['companyId'], argv['apiKey'], argv['world']);
+            const companyFleet: Aircraft[] = await api.getCompanyFleet();
             if (companyFleet.length) {
               log(chalk.greenBright.bold('Your fleet of aircraft\n'));
               
@@ -70,7 +68,7 @@ export const companyCommand: CompanyCommand = {
           case 'flights': {
             const page = typeof argv['page'] === 'undefined' || argv['page'] < 1 ? 1 : argv['page'];
             const limit = 20;
-            const companyFlights: Flight[] = await getCompanyFlights(argv['companyId'], argv['apiKey'], argv['world'], page, limit);
+            const companyFlights: Flight[] = await api.getCompanyFlights(page, limit);
             if (companyFlights.length) {
               log(chalk.greenBright.bold(`Your flights (Page ${page}, ${limit} per page)\n`));
               
@@ -87,8 +85,9 @@ export const companyCommand: CompanyCommand = {
             }
             break;
           }
+
           case 'fbos': {
-            const companyFbos: Fbo[] = await getCompanyFbos(argv['companyId'], argv['apiKey'], argv['world']);
+            const companyFbos: Fbo[] = await api.getCompanyFbos();
             
             if (companyFbos.length) {
               log(chalk.greenBright.bold('Your FBOs\n'));
@@ -96,6 +95,19 @@ export const companyCommand: CompanyCommand = {
             } else {
               log('No FBO... no 100LL! ' + chalk.magentaBright('✈'))
             }
+            break;  
+          }
+
+          case 'jobs': {
+            const companyJobs: Job[] = await api.getCompanyJobs();
+
+            if (companyJobs.length) {
+              log(chalk.greenBright.bold('Your Pending Jobs\n'));
+              logCompanyJobs(companyJobs);
+            } else {
+              log('No pending jobs! ' + chalk.magentaBright('✈'))
+            }
+            break;
           }
         }
       }

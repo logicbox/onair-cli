@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { Flight } from "../types/Flight"
+import { Flight } from "onair-api"
 import { cliTable } from "../utils/cli-table";
 
 export const logFlights = (flights: Flight[], showIdent: boolean=true, showCompany: boolean=false): void => {

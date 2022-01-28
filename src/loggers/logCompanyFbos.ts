@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { Fbo } from "../types/Fbo";
+import { Fbo } from "onair-api";
+
 import { cliTable } from "../utils/cli-table";
 
 export const logCompanyFbos = (companyFbos: Fbo[]): void => {
