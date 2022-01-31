@@ -7,7 +7,7 @@ const logAccounts = (account: ISAccount[], cols: number): void => {
   account.forEach((ISAccount) => {
     const amount = ISAccount.Amount.toLocaleString('en-GB');
     const paddingCount = cols - ISAccount.Name.length - amount.length;
-    log(ISAccount.Name + ' '.repeat(paddingCount) + amount);
+    log(ISAccount.Name + chalk.gray('.'.repeat(paddingCount)) + amount);
   });
 }
 
