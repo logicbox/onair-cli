@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { IncomeStatement, ISAccount } from "onair-api";
+import { IncomeStatement, Account } from "onair-api";
 
 const log = console.log;
 
-const logAccounts = (account: ISAccount[], cols: number): void => {
+const logAccounts = (account: Account[], cols: number): void => {
   account.forEach((ISAccount) => {
     const amount = ISAccount.Amount.toLocaleString('en-GB');
     const paddingCount = cols - ISAccount.Name.length - amount.length;
