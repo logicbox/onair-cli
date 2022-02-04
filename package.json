@@ -1,11 +1,7 @@
 {
   "name": "onair-cli",
   "description": "A CLI to display information from OnAir Airline Manager",
-<<<<<<< HEAD
-  "version": "1.4.1",
-=======
   "version": "1.5.0-alpha.0",
->>>>>>> 1.5.0-alpha.0
   "main": "bin/index.js",
   "author": {
     "name": "Will Kelly",
