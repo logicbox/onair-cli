@@ -1,6 +1,6 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import chalk from 'chalk';
-import OnAirApi, { OnAirApiConfig, Company, Aircraft, Flight, Fbo, Job } from 'onair-api';
+import OnAirApi, { OnAirApiConfig, Company, Aircraft, Flight, Fbo, Job, IncomeStatement } from 'onair-api';
 
 import { CommonConfig } from '../utils/commonTypes';
 import { logFlights } from '../loggers/logFlights';
@@ -8,6 +8,7 @@ import { logCompany } from '../loggers/logCompany';
 import { logCompanyFleet } from '../loggers/logCompanyFleet';
 import { logCompanyFbos } from '../loggers/logCompanyFbos';
 import { logCompanyJobs } from '../loggers/logCompanyJobs';
+import { logCompanyIncome } from '../loggers/logCompanyIncome';
 
 const log = console.log;
 
@@ -16,19 +17,25 @@ const builder = (yargs: yargs.Argv<CommonConfig>) => {
     .positional('action', {
       describe: 'Optional info to lookup from your company',
       type: 'string',
-      choices: ['fleet', 'flights', 'fbos', 'jobs'],
+      choices: ['fleet', 'flights', 'fbos', 'jobs', 'income'],
     })
     .option('page', {
       'describe': 'Page number (flights only)',
       'type': 'number',
       'alias': 'p',
     })
+    .option('days', {
+      'describe': 'Days to display (Income statement only)',
+      'type': 'number',
+    })
     .example('$0 company','Get summary information for your company')
     .example('$0 company fleet','List your aircraft')
     .example('$0 company flights','List your flights')
     .example('$0 company flights -p=2','List your flights, showing page 2')
     .example('$0 company fbos', 'List your FBOs')
-    .example('$0 company jobs', 'List your pending jobs');
+    .example('$0 company jobs', 'List your pending jobs')
+    .example('$0 company income', 'Display your company income statement summary')
+    .example('$0 company income --days=30', 'Display your statement summary for the last 30 days');
 }
 
 type CompanyCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never;
@@ -108,6 +115,18 @@ export const companyCommand: CompanyCommand = {
               log('No pending jobs! ' + chalk.magentaBright('✈'))
             }
             break;
+          }
+
+          case 'income': {
+            const daysToDisplay = 
+              typeof argv['days'] === 'undefined' || argv['days'] < 1 || argv['days'] > 30 
+              ? 7 : argv['days'];
+            const currentDate = new Date();
+            const currentDateStr = currentDate.toISOString();
+            const priorDate = new Date().setDate(currentDate.getDate() - daysToDisplay);
+            const priorDateStr = new Date(priorDate).toISOString();
+            const income: IncomeStatement = await api.getCompanyIncomeStatement(priorDateStr, currentDateStr);    
+            logCompanyIncome(income, daysToDisplay);
           }
         }
       }

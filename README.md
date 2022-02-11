@@ -28,6 +28,10 @@ For ease of use save your OnAir credentials.
 
 Your OnAir API key and Company ID are found in the bottom left of the settings page in the OnAir client. The world name is 'cumulus', 'stratus', or 'thunder'. Use 'stratus' for Clear Sky server.
 
+If you are a member of a Virtual Airline (VA), you can also add your VA ID. This can be found in the Manage VA options screen.
+
+`onair-cli set-creds --apiKey=[API_KEY] --world=[WORLD] --companyId=[COMPANY_ID] --vaId=[VIRTUAL_AIRLINE_ID]`
+
 ## Commands
 
 ### Aircraft
